@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Xe tank</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        #interface {
+            margin-left: 10px;
+        }
+
+        #map {
+            position: relative;
+            border: 1px solid black;
+            top: 0px;
+            left: 0px;
+            height: 190px;
+            width: 190px;
+            background-color: white;
+        }
+
+        #tank {
+            position: relative;
+            top: 0px;
+            left: 0px;
+            width: 19px;
+            height: 19px;
+            background-size: 100% 100%;
+        }
+
+        #boom {
+            position: absolute;
+            top: 76px;
+            left: 114px;
+            width: 19px;
+            height: 19px;
+            background-size: 100% 100%;
+        }
+
+        #ctrl {
+            position: relative;
+            margin-top: 4px;
+            height: 102px;
+            width: 102px;
+        }
+
+        .btn {
+            display: block;
+            height: 34px;
+            width: 34px;
+            background-color: antiquewhite;
+            color: black;
+            font-size: 18px;
+        }
+
+        .btn:hover {
+            background-color: lightgrey;
+        }
+
+        #up.btn {
+            position: absolute;
+            top: 0px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #down.btn {
+            position: absolute;
+            bottom: 0px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #left.btn {
+            position: absolute;
+            top: 50%;
+            left: 0px;
+            transform: translateY(-50%);
+        }
+
+        #right.btn {
+            position: absolute;
+            top: 50%;
+            right: 0px;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+
+<body>
+<div id="interface">
+    <div id="map">
+        <img id="tank" src="./img/tank-1.png" alt="xe tank" />
+
+        <img id="boom" src="./img/boom.png" alt="boom" />
+    </div>
+
+    <div id="ctrl">
+        <button id="up" class="btn" type="button" name="up" onclick="up()">&#8593;</button>
+
+        <button id="down" class="btn" type="button" name="down" onclick="down()">&#8595;</button>
+
+        <button id="left" class="btn" type="button" name="left" onclick="left()">&#8592;</button>
+
+        <button id="right" class="btn" type="button" name="right" onclick="right()">&#8594;</button>
+    </div>
+</div>
+<script src="main.js"></script>
+
+</body>
+
+</html>
+<script>
+    let bom = document.getElementById('boom'),
+        bomStyle = getComputedStyle(bom); //hàm built-in getComputedStyle() cho ra data read-only
+
+    let tank = document.getElementById('tank');
+
+    let speed = 19, //di chuyển 1 ô = kích thước tank 19x19
+        posX = 0, //gốc trục hoành
+        posY = 0; //gốc trục tung
+
+    function up() {
+        posY -= speed;
+        tank.style.top = posY + 'px';
+        checkImpact()
+    }
+
+    function down() {
+        posY += speed;
+        tank.style.top = posY + 'px';
+        checkImpact()
+    }
+
+    function left() {
+        posX -= speed;
+        tank.style.left = posX + 'px';
+        checkImpact()
+    }
+
+    function right() {
+        posX += speed;
+        tank.style.left = posX + 'px';
+        checkImpact()
+    }
+
+    function checkImpact() {
+        if (tank.style.top == bomStyle.top &&
+            tank.style.left == bomStyle.left) {
+            tank.src = './img/explosion.png';
+            bom.remove();
+        }
+    }
+
+    //Di chuyển bằng arrow keys
+    function moveSelection(evt) {
+        switch (evt.keyCode) {
+            case 37:
+                left();
+                break;
+            case 38:
+                up();
+                break;
+            case 39:
+                right()
+                break;
+            case 40:
+                down();
+        }
+    }
+    document.addEventListener('keydown', moveSelection);
+</script>
